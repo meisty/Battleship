@@ -20,14 +20,20 @@ void Clear()
     }
 }
 
-void Show()
-{
-    for(int i=0; i < rows; i++)
-    {
-        for(int j=0; j < cols; j++)
-        {
-            cout << matrix[i][j] << " ";
-        }
+//show ? if unchecked spot
+//show * if sunk ship 
+//show & if spot checked and no ship
+void Show(){
+    for(int i=0; i<rows; i++) {
+        for(int j=0; j< cols; j++) {
+        	if ((matrix[i][j] == 0) || (matrix[i][j] == 1)) {
+        		cout << '?' << " "; 
+        	} else if (matrix[i][j] == 2) {
+        		cout << '*' << " ";
+        	} else {
+        		cout << '&' << " ";
+        	}
+    	}
         cout << endl;
     }
 }
@@ -64,14 +70,16 @@ int NumberOfShips()
     return c;
 }
 
-bool Attack(int x, int y)
-{
-    if(matrix[x][y] == 1)
-    {
+//to do: add in check if coordinate has already been input
+bool Attack(int x, int y){
+    if (matrix[x][y]== 1) {
         matrix[x][y] = 2;
         return true;
-    }    
-    
+    } else {
+    	matrix[x][y] = 3;
+    	return false;
+    }
+    return false;
 }
 
 int main()
@@ -79,47 +87,39 @@ int main()
     srand(time(NULL));
     
     Clear();
-    cout << "Welcome to this simple game of battleships.  " << endl;
-    cout << "The computer has hidden 3 ships on a 5 x 5 board \n";
+    cout << "\nWelcome to simple Battleship!" << endl;
+    cout << "There are " << MaxShips << " ships hidden on this 5x5 board." << endl;
     Show();
-    cout << "The board shows 0's where no ship is, the computer will hide the ships and they will show as 1's and when sunk 2's. " << endl;
-    cout << "-------------------------------- Randomly hiding ships --------------------------------" << endl;
+    cout << "The board shows ?'s where no ship is,\n\t  shows *'s when a ship is sunk and\n\t  shows &'s where no ship is found" << endl;
     SetShips();
-    int pos1,pos2;
-    
+    int pos1, pos2;
     char prompt;
-    
-    
-    
-    while(1)
-    {
+    int numShips = NumberOfShips();
 
-        cout << "Please enter the location of your guess (row then column, numbers 0-4 e.g 0 0 is the first square): ";
+    while(1) {
+    	cout << "Please enter the location of your guess\n(row then column, numbers 0-4 e.g 0 0 is the first square): ";
+        //check for length of input to avoid numbers outside the grid
         cin >> pos1 >> pos2;
-        if(Attack(pos1,pos2))
-        {
-            cout << "You sunk my Battleship!" << endl;
-        }else{
-            cout << "Sorry there is no ship at this location, please try again" << endl;
+        if(Attack(pos1,pos2)) {
+            cout << "You sunk my battleship!" << endl;
+            numShips=numShips-1;
+        } else {
+            cout << "No ship at this location, try again." << endl;
         }
-        cout << "Number of ships remaining: " << NumberOfShips() << endl;
-        if (NumberOfShips() == 0){
+        Show();
+        cout << "Number of ships remaining: " <<  numShips << endl;
+        if (numShips == 0) {
+        	cout << "You sunk all the ships!" << endl;
             break;
         }
-        cout << "Do you want to surrender (y/n)? ";
+        cout << "Do you want to surrender (y/n)?" << endl;
         cin >> prompt;
-        if(prompt == 'y')
-        {
+        if (prompt == 'y') {
             break;
-        }
-        
-
+        }  
     }
-    
-    cout << "Game over!" << endl;
+    cout << "Game Over!" << endl;
     Show();
-    
-    
     
     return 0;
 }
