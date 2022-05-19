@@ -128,6 +128,7 @@ int main() {
 		cout << "Enter coordinates of guess: ";
 		cin >> xinput >> yinput;
 		nfl = NumberFromLetter(xinput);
+		//variable nfl is number converted from x axis letter
 		//cout << "Trying " << nfl << "," << yinput << endl;
 		
 		//make sure values are within range 
